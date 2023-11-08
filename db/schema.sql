@@ -172,9 +172,12 @@ CREATE TABLE `orders` (
   `qr_code` text COLLATE utf8mb4_unicode_ci,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
+  `schedule_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `class_id` (`class_id`),
+  KEY `fk_orders_schedules` (`schedule_id`),
+  CONSTRAINT `fk_orders_schedules` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -206,14 +209,12 @@ CREATE TABLE `schedules` (
   `id` int NOT NULL AUTO_INCREMENT,
   `class_day` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `teacher_desc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int DEFAULT NULL,
   `class_id` int DEFAULT NULL,
   `class_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
+  `enrolled_member` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
   KEY `class_id` (`class_id`),
-  CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -313,5 +314,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231108080243'),
   ('20231108080321'),
   ('20231108080401'),
-  ('20231108083154');
+  ('20231108083154'),
+  ('20231108113044');
 UNLOCK TABLES;
